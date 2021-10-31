@@ -14,4 +14,17 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="sample_run_1\p1.txt" />
+    <Text Include="sample_run_1\configuration.txt" />
+    <Text Include="sample_run_1\p2.txt" />
+    <Text Include="sample_run_1\p3.txt" />
+    <Text Include="sample_run_1\p4.txt" />
+    <Text Include="sample_run_1\p5.txt" />
+  </ItemGroup>
 </Project>
