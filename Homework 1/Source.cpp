@@ -26,8 +26,23 @@ string getFolderName() {
 	return folderName;
 }
 
+string getConfigFilePath(const string &folderName) {
+	return folderName + "/" + "configuration.txt";
+}
+
+int readFromConfig(ifstream& configReader) {
+	int value;
+	configReader >> value;
+	return value;
+}
 
 int main() {
 	string folderName = getFolderName();
+	string configFilePath = getConfigFilePath(folderName);
+	ifstream configReader(configFilePath);
+	int numberOfQueues = readFromConfig(configReader), 
+		numberOfProcesses = readFromConfig(configReader), 
+		numberOfSlices = readFromConfig(configReader);
+	
 	queue<int> Queue(id);
 }
