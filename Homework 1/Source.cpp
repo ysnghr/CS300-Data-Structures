@@ -57,6 +57,25 @@ bool isEmptyVector(const vector<queue<Process>>& queues) {
 	return true;
 }
 
+string getQueueName(int queueSize, int id) {
+	return "Q" + to_string(queueSize - id);
+}
+
+void getAllToTopMostQueue(vector<queue<Process>> &allQueues) {
+	int iterator_new = 1;
+	while (iterator_new != allQueues.size()) {
+		while (!allQueues[iterator_new].empty()) {
+			allQueues[0].push(allQueues[iterator_new].front());
+			cout << "B, " << allQueues[0].back().processName << ", " << getQueueName(allQueues.size(), 0) << endl;
+			allQueues[iterator_new].pop();
+		}
+		iterator_new++;
+	}
+
+}
+
+
+
 int main() {
 	string folderName = getFolderName();
 	string configFilePath = getFilePath(folderName, "configuration.txt");
@@ -79,22 +98,47 @@ int main() {
 		string processFileName = "p" + to_string(i) + ".txt", processFilePath = getFilePath(folderName, processFileName);
 		Process newProcess;
 		readProcessFile(processFilePath, newProcess);
-		newProcess.processName = processFileName;
+		newProcess.processName = "PC" + to_string(i);
 		allQueues[0].push(newProcess);
 	}
 
-	int iterator_all = 0;
+	int iterator_all = 0, time_slicer = 0;
 	while (iterator_all != allQueues.size()) {
 		while (!allQueues[iterator_all].empty()) {
+			if (time_slicer == numberOfSlices)
+			{
+				getAllToTopMostQueue(allQueues);
+				iterator_all = -1;
+				time_slicer = 0;
+				break;
+			}
 			Process *element = &allQueues[iterator_all].front();
 			if (element->stages.front() == '1') {
 				element->stages.pop();
-				allQueues[iterator_all + 1].push(*element);
-				allQueues[iterator_all].pop();
+				time_slicer++;
+				// remove process from queue
+				if (element->stages.front() == '-') {
+					cout << "E, " << element->processName << ", " << "QX" << endl;
+					allQueues[iterator_all].pop();
+				}
+				else {
+					allQueues[iterator_all + 1].push(*element);
+					cout << "1, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all + 1) << endl;
+					allQueues[iterator_all].pop();
+				}
 			}
 			else if (element->stages.front() == '0') {
-				allQueues[iterator_all].push(*element);
-				allQueues[iterator_all].pop();
+				element->stages.pop();
+				time_slicer++;
+				if (element->stages.front() == '-') {
+					cout << "E, " << element->processName << ", " << "QX" << endl;
+					allQueues[iterator_all].pop();
+				}
+				else {
+					allQueues[iterator_all].push(*element);
+					cout << "0, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all) << endl;
+					allQueues[iterator_all].pop();
+				}
 			}
 			else {
 
