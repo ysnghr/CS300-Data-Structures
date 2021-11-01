@@ -12,6 +12,7 @@ struct Process {
 	queue<char> stages;
 	int index_current;
 	bool is_finished;
+	string processName;
 
 	Process() : is_finished(false), index_current(0), stages()
 	{}
@@ -46,6 +47,16 @@ void readProcessFile(const string &processName, Process& newProcess) {
 	processFileReader.close();
 }
 
+bool isEmptyVector(const vector<queue<Process>>& queues) {
+	for (int i = 0; i < queues.size(); i++)
+	{
+		if (!queues[i].empty()) {
+			return false;
+		}
+	}
+	return true;
+}
+
 int main() {
 	string folderName = getFolderName();
 	string configFilePath = getFilePath(folderName, "configuration.txt");
@@ -68,19 +79,38 @@ int main() {
 		string processFileName = "p" + to_string(i) + ".txt", processFilePath = getFilePath(folderName, processFileName);
 		Process newProcess;
 		readProcessFile(processFilePath, newProcess);
+		newProcess.processName = processFileName;
 		allQueues[0].push(newProcess);
 	}
 
+	int iterator_all = 0;
+	while (iterator_all != allQueues.size()) {
+		while (!allQueues[iterator_all].empty()) {
+			Process *element = &allQueues[iterator_all].front();
+			if (element->stages.front() == '1') {
+				element->stages.pop();
+				allQueues[iterator_all + 1].push(*element);
+				allQueues[iterator_all].pop();
+			}
+			else if (element->stages.front() == '0') {
+				allQueues[iterator_all].push(*element);
+				allQueues[iterator_all].pop();
+			}
+			else {
 
+			}
+		}
+		iterator_all++;
+	}
 
-	// printing queues
 
 	//	while (!allQueues[0].empty()) {
+	//		cout << allQueues[0].front().processName << endl;
 	//		while (!allQueues[0].front().stages.empty()) {
 	//			cout << allQueues[0].front().stages.front() << endl;
 	//			allQueues[0].front().stages.pop();
 	//		}
-	//		cout << "--------" << endl;
+	//		cout << " --------" << endl;
 	//		allQueues[0].pop();
 	//	}
 
