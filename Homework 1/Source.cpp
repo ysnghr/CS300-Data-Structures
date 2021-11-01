@@ -6,8 +6,6 @@
 
 using namespace std;
 
-//#define Queue(x) queue_ ## x
-
 struct Process {
 	queue<char> stages;
 	int index_current;
@@ -48,8 +46,7 @@ void readProcessFile(const string &processName, Process& newProcess) {
 }
 
 bool isEmptyVector(const vector<queue<Process>>& queues) {
-	for (int i = 0; i < queues.size(); i++)
-	{
+	for (int i = 0; i < queues.size(); i++)	{
 		if (!queues[i].empty()) {
 			return false;
 		}
@@ -74,8 +71,6 @@ void getAllToTopMostQueue(vector<queue<Process>> &allQueues, ofstream &outputTXT
 
 }
 
-
-
 int main() {
 	string folderName = getFolderName();
 	string configFilePath = getFilePath(folderName, "configuration.txt");
@@ -88,13 +83,11 @@ int main() {
 	vector<queue<Process>> allQueues;
 
 	for (int i = 0; i < numberOfQueues; i++) {
-		// queue<Process> Queue(id);
 		queue<Process> queueProcess;
 		allQueues.push_back(queueProcess);
 	}
 
-	for (int i = 1; i < numberOfProcesses + 1; i++)
-	{
+	for (int i = 1; i < numberOfProcesses + 1; i++)	{
 		string processFileName = "p" + to_string(i) + ".txt", processFilePath = getFilePath(folderName, processFileName);
 		Process newProcess;
 		readProcessFile(processFilePath, newProcess);
@@ -107,18 +100,16 @@ int main() {
 	outputTXT.open(getFilePath(folderName, "output.txt"));
 	while (iterator_all != allQueues.size()) {
 		while (!allQueues[iterator_all].empty()) {
-			if (time_slicer == numberOfSlices)
-			{
+			if (time_slicer == numberOfSlices)	{
 				getAllToTopMostQueue(allQueues, outputTXT);
-				iterator_all = -1;
-				time_slicer = 0;
+				iterator_all = -1; time_slicer = 0;
 				break;
 			}
 			Process *element = &allQueues[iterator_all].front();
 			if (element->stages.front() == '1') {
 				element->stages.pop();
 				time_slicer++;
-				// remove process from queue
+
 				if (element->stages.front() == '-') {
 					count_processors--;
 					outputTXT << "E, " << element->processName << ", " << "QX";
