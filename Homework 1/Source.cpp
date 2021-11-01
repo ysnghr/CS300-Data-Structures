@@ -122,9 +122,12 @@ int main() {
 					allQueues[iterator_all].pop();
 				}
 				else {
-					allQueues[iterator_all + 1].push(*element);
-					cout << "1, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all + 1) << endl;
-					allQueues[iterator_all].pop();
+					if (iterator_all + 1 != allQueues.size())
+					{
+						allQueues[iterator_all + 1].push(*element);
+						cout << "1, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all + 1) << endl;
+						allQueues[iterator_all].pop();
+					}
 				}
 			}
 			else if (element->stages.front() == '0') {
@@ -139,9 +142,6 @@ int main() {
 					cout << "0, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all) << endl;
 					allQueues[iterator_all].pop();
 				}
-			}
-			else {
-
 			}
 		}
 		iterator_all++;
