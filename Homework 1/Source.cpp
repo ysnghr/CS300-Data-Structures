@@ -61,12 +61,12 @@ string getQueueName(int queueSize, int id) {
 	return "Q" + to_string(queueSize - id);
 }
 
-void getAllToTopMostQueue(vector<queue<Process>> &allQueues) {
+void getAllToTopMostQueue(vector<queue<Process>> &allQueues, ofstream &outputTXT) {
 	int iterator_new = 1;
 	while (iterator_new != allQueues.size()) {
 		while (!allQueues[iterator_new].empty()) {
 			allQueues[0].push(allQueues[iterator_new].front());
-			cout << "B, " << allQueues[0].back().processName << ", " << getQueueName(allQueues.size(), 0) << endl;
+			outputTXT << "B, " << allQueues[0].back().processName << ", " << getQueueName(allQueues.size(), 0) << "\n";
 			allQueues[iterator_new].pop();
 		}
 		iterator_new++;
@@ -102,12 +102,14 @@ int main() {
 		allQueues[0].push(newProcess);
 	}
 
-	int iterator_all = 0, time_slicer = 0;
+	int iterator_all = 0, time_slicer = 0, count_processors = numberOfProcesses;
+	ofstream outputTXT;
+	outputTXT.open(getFilePath(folderName, "output.txt"));
 	while (iterator_all != allQueues.size()) {
 		while (!allQueues[iterator_all].empty()) {
 			if (time_slicer == numberOfSlices)
 			{
-				getAllToTopMostQueue(allQueues);
+				getAllToTopMostQueue(allQueues, outputTXT);
 				iterator_all = -1;
 				time_slicer = 0;
 				break;
@@ -118,14 +120,18 @@ int main() {
 				time_slicer++;
 				// remove process from queue
 				if (element->stages.front() == '-') {
-					cout << "E, " << element->processName << ", " << "QX" << endl;
+					count_processors--;
+					outputTXT << "E, " << element->processName << ", " << "QX";
+					if (count_processors != 0) {
+						outputTXT << "\n";
+					}
 					allQueues[iterator_all].pop();
 				}
 				else {
 					if (iterator_all + 1 != allQueues.size())
 					{
 						allQueues[iterator_all + 1].push(*element);
-						cout << "1, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all + 1) << endl;
+						outputTXT << "1, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all + 1) << "\n";
 						allQueues[iterator_all].pop();
 					}
 				}
@@ -134,30 +140,21 @@ int main() {
 				element->stages.pop();
 				time_slicer++;
 				if (element->stages.front() == '-') {
-					cout << "E, " << element->processName << ", " << "QX" << endl;
+					count_processors--;
+					outputTXT << "E, " << element->processName << ", " << "QX";
+					if (count_processors != 0) {
+						outputTXT << "\n";
+					}
 					allQueues[iterator_all].pop();
 				}
 				else {
 					allQueues[iterator_all].push(*element);
-					cout << "0, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all) << endl;
+					outputTXT << "0, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all) << "\n";
 					allQueues[iterator_all].pop();
 				}
 			}
 		}
 		iterator_all++;
 	}
-
-
-	//	while (!allQueues[0].empty()) {
-	//		cout << allQueues[0].front().processName << endl;
-	//		while (!allQueues[0].front().stages.empty()) {
-	//			cout << allQueues[0].front().stages.front() << endl;
-	//			allQueues[0].front().stages.pop();
-	//		}
-	//		cout << " --------" << endl;
-	//		allQueues[0].pop();
-	//	}
-
-	
-	
+	outputTXT.close();	
 }
