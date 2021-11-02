@@ -1,0 +1,13 @@
+1, PC1, Q1
+0, PC1, Q1
+1, PC1, Q1
+1, PC1, Q1
+1, PC1, Q1
+1, PC1, Q1
+1, PC1, Q1
+1, PC1, Q1
+0, PC1, Q1
+1, PC1, Q1
+B, PC1, Q2
+0, PC1, Q2
+E, PC1, QX

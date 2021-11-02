@@ -125,6 +125,9 @@ int main() {
 						outputTXT << "1, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all + 1) << "\n";
 						allQueues[iterator_all].pop();
 					}
+					else {
+						outputTXT << "1, " << element->processName << ", " << getQueueName(allQueues.size(), iterator_all) << "\n";
+					}
 				}
 			}
 			else if (element->stages.front() == '0') {
