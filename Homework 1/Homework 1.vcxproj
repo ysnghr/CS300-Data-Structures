@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="28554-YasinUghur.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sample_run_1\configuration.txt" />
